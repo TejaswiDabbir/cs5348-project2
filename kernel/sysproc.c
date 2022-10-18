@@ -88,3 +88,15 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// sets number of tickets for a process
+// returns 0 if successfull and -1 otherwise
+int
+sys_settickets(int new_tickets)
+{
+  if (new_tickets > 0) {
+    proc->tickets = new_tickets;
+    return 0;
+  }
+  return -1;
+}
