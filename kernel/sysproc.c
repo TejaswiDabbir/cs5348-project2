@@ -92,8 +92,10 @@ sys_uptime(void)
 // sets number of tickets for a process
 // returns 0 if successfull and -1 otherwise
 int
-sys_settickets(int new_tickets)
+sys_settickets(void)
 {
+  int new_tickets = 0;
+  argint(0,&new_tickets);
   if (new_tickets > 0) {
     proc->tickets = new_tickets;
     return 0;

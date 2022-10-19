@@ -103,7 +103,6 @@ static int (*syscalls[])(void) = {
 [SYS_wait]    sys_wait,
 [SYS_write]   sys_write,
 [SYS_uptime]  sys_uptime,
-[SYS_settickets] sys_testtickets,//this works
 [SYS_settickets] sys_settickets,//this doesn't as it has an int parameter
 };
 
