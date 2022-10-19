@@ -19,6 +19,8 @@ extern void trapret(void);
 
 static void wakeup1(void *chan);
 
+int total_tickets = 0;
+
 void
 pinit(void)
 {
@@ -45,7 +47,6 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
-  p->tickets = 1;
   release(&ptable.lock);
 
   // Allocate kernel stack if possible.
@@ -99,6 +100,8 @@ userinit(void)
   p->cwd = namei("/");
 
   p->state = RUNNABLE;
+  p->tickets = 1;
+  total_tickets += 1;
   release(&ptable.lock);
 }
 
@@ -156,6 +159,8 @@ fork(void)
  
   pid = np->pid;
   np->state = RUNNABLE;
+  np->tickets = proc->tickets;
+  total_tickets += np->tickets;
   safestrcpy(np->name, proc->name, sizeof(proc->name));
   return pid;
 }
@@ -199,6 +204,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   proc->state = ZOMBIE;
+  total_tickets -= proc->tickets;
   sched();
   panic("zombie exit");
 }
@@ -262,10 +268,17 @@ scheduler(void)
     // Enable interrupts on this processor.
     sti();
 
+    int winning_ticket = 15; // find by calling random function
+    int iterated_tickets = 0;
+
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
+        continue;
+      
+      iterated_tickets += p->tickets;
+      if(iterated_tickets < winning_ticket)
         continue;
 
       // Switch to chosen process.  It is the process's job
@@ -352,6 +365,7 @@ sleep(void *chan, struct spinlock *lk)
   // Go to sleep.
   proc->chan = chan;
   proc->state = SLEEPING;
+  total_tickets -= proc->tickets;
   sched();
 
   // Tidy up.
@@ -373,7 +387,11 @@ wakeup1(void *chan)
 
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
     if(p->state == SLEEPING && p->chan == chan)
+    {
       p->state = RUNNABLE;
+      total_tickets += p->tickets;
+    }
+      
 }
 
 // Wake up all processes sleeping on chan.
