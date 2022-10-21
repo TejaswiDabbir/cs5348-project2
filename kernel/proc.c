@@ -462,4 +462,20 @@ procdump(void)
   }
 }
 
+/*
+* The following code is added by Nick Colvin nxc220016
+**
+** This code returns a random ticket number
+** between 1 and the total number of tickets
+** using a linear congruential generator
+*/
+int
+nextticket(void)
+{
+  static int random_num = 0;
+  random_num = (random_num * 1103515245 + 12345) & ((1U << 31) - 1);
+
+  int ticket = random_num % total_tickets + 1;
+  return ticket;
+}
 
