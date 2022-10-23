@@ -2,6 +2,7 @@
 # user programs
 USER_PROGS := \
 	cat\
+	default_tickets\
 	echo\
 	forktest\
 	grep\

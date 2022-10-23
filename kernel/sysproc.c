@@ -109,5 +109,5 @@ sys_getpinfo(void)
 {
   struct pstat *stats;
   argptr(1, (void*)&stats, sizeof(*stats));
-  return getpinfo(stats);
+  return pinfohelper(stats);
 }

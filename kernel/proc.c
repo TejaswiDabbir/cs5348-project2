@@ -484,7 +484,7 @@ nextticket(void)
 }
 
 int
-getpinfo(struct pstat *ps)
+pinfohelper(struct pstat *ps)
 {
   int i = 0;
   struct proc *p;
