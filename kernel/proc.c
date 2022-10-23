@@ -5,6 +5,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "pstat.h"
 
 struct {
   struct spinlock lock;
@@ -267,9 +268,11 @@ scheduler(void)
   for(;;){
     // Enable interrupts on this processor.
     sti();
-    int winning_ticket = 0;
-    if (total_tickets == 0)
-      winning_ticket = nextticket(); // find by calling random function
+
+    if (!total_tickets)
+      continue;
+
+    int winning_ticket = nextticket(); // find by calling random function
     int iterated_tickets = 0;
 
     // Loop over process table looking for process to run.
@@ -290,6 +293,7 @@ scheduler(void)
       p->state = RUNNING;
       swtch(&cpu->scheduler, proc->context);
       switchkvm();
+      p->ticks++;
 
       // Process is done running for now.
       // It should have changed its p->state before coming back.
@@ -479,3 +483,22 @@ nextticket(void)
   return ticket;
 }
 
+int
+getpinfo(struct pstat *ps)
+{
+  int i = 0;
+  struct proc *p;
+  
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    ps->pid[i] = p->pid;
+    ps->tickets[i] = p->tickets;
+    ps->ticks[i] = p->ticks;
+    ps->inuse[i] = !p->state == UNUSED;
+    i++;
+  }
+  release(&ptable.lock);
+
+  return 0;
+}
+/* End of code added */
