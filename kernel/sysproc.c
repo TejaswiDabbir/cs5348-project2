@@ -5,6 +5,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "sysfunc.h"
+#include "pstat.h"
 
 int
 sys_fork(void)
@@ -101,4 +102,12 @@ sys_settickets(void)
     return 0;
   }
   return -1;
+}
+
+int
+sys_getpinfo(void)
+{
+  struct pstat *stats;
+  argptr(1, (void*)&stats, sizeof(*stats));
+  return 0;
 }

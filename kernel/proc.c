@@ -267,8 +267,9 @@ scheduler(void)
   for(;;){
     // Enable interrupts on this processor.
     sti();
-
-    int winning_ticket = 15; // find by calling random function
+    int winning_ticket = 0;
+    if (total_tickets == 0)
+      winning_ticket = nextticket(); // find by calling random function
     int iterated_tickets = 0;
 
     // Loop over process table looking for process to run.
@@ -474,8 +475,7 @@ nextticket(void)
 {
   static int random_num = 0;
   random_num = (random_num * 1103515245 + 12345) & ((1U << 31) - 1);
-
-  int ticket = random_num % total_tickets + 1;
+  int ticket = (random_num % total_tickets) + 1;
   return ticket;
 }
 
