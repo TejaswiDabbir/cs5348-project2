@@ -5,15 +5,25 @@ USER_PROGS := \
 	default_tickets\
 	echo\
 	forktest\
+	forktickets\
+	getpinfo\
 	grep\
+	high_sleep\
+	high_tickets\
 	init\
 	kill\
 	ln\
 	ls\
 	mkdir\
+	processesinuse\
+	random\
 	rm\
+	setticket\
 	sh\
+	stress_equal\
+	stress_manylow\
 	stressfs\
+	switch_tickets\
 	tester\
 	usertests\
 	wc\
