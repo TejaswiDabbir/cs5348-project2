@@ -108,6 +108,7 @@ int
 sys_getpinfo(void)
 {
   struct pstat *stats;
-  argptr(0, (void*)&stats, sizeof(*stats));
+  if (argptr(0, (void*)&stats, sizeof(*stats)) < 0 || stats == NULL)
+    return -1;
   return pinfohelper(stats);
 }

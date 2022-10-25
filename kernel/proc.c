@@ -272,11 +272,20 @@ scheduler(void)
     if (!total_tickets)
       continue;
 
-    int winning_ticket = nextticket(); // find by calling random function
     int iterated_tickets = 0;
-
+    int runnable_tickets_found = 0;
     // Loop over process table looking for process to run.
     acquire(&ptable.lock);
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+      if(p->state != RUNNABLE)
+        continue;
+
+      runnable_tickets_found += p->tickets;
+    }
+
+    total_tickets = runnable_tickets_found;
+    int winning_ticket = nextticket(); // find by calling random function
+
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
         continue;
@@ -298,6 +307,9 @@ scheduler(void)
       // Process is done running for now.
       // It should have changed its p->state before coming back.
       proc = 0;
+      
+      break;
+
     }
     release(&ptable.lock);
 
