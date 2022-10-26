@@ -44,10 +44,10 @@ int checkVariance(int *pid_chds, struct pstat *before, struct pstat *after, int 
        break;
      diffs[i] = 0;
      int j;
-     for (j = 0; j < numprocs; j++){
+     for (j = 0; j < NPROC; j++){
        if (before->pid[j] == pid){
          int k;
-         for (k = 0; k < numprocs; k++){
+         for (k = 0; k < NPROC; k++){
            if (after->pid[k] == pid){
              diffs[i] = after->ticks[k] - before->ticks[j];
              sum += diffs[i];
@@ -86,7 +86,7 @@ int checkVariance(int *pid_chds, struct pstat *before, struct pstat *after, int 
      return -1;
    }
    var /= count;
-   // printf(1, "Variance: ~%d\n",(int)var);
+   printf(1, "Sum : %d\nCount : %d\nNumprocs : %d\n",sum,count,numprocs);
    if (var < tol)
      return 0;
    else{

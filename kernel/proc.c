@@ -102,7 +102,8 @@ userinit(void)
 
   p->state = RUNNABLE;
   p->tickets = 1;
-  total_tickets += 1;
+  p->ticks = 0;
+  // total_tickets += 1;
   release(&ptable.lock);
 }
 
@@ -161,7 +162,8 @@ fork(void)
   pid = np->pid;
   np->state = RUNNABLE;
   np->tickets = proc->tickets;
-  total_tickets += np->tickets;
+  np->ticks = 0;
+  // total_tickets += np->tickets;
   safestrcpy(np->name, proc->name, sizeof(proc->name));
   return pid;
 }
@@ -205,7 +207,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   proc->state = ZOMBIE;
-  total_tickets -= proc->tickets;
+  // total_tickets -= proc->tickets;
   sched();
   panic("zombie exit");
 }
@@ -269,8 +271,7 @@ scheduler(void)
     // Enable interrupts on this processor.
     sti();
 
-    if (!total_tickets)
-      continue;
+    
 
     int iterated_tickets = 0;
     int runnable_tickets_found = 0;
@@ -284,6 +285,10 @@ scheduler(void)
     }
 
     total_tickets = runnable_tickets_found;
+    if (!total_tickets) {
+      release(&ptable.lock);
+      continue;
+    }
     int winning_ticket = nextticket(); // find by calling random function
 
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
@@ -302,7 +307,7 @@ scheduler(void)
       p->state = RUNNING;
       swtch(&cpu->scheduler, proc->context);
       switchkvm();
-      p->ticks++;
+      p->ticks += 1;
 
       // Process is done running for now.
       // It should have changed its p->state before coming back.
@@ -382,7 +387,7 @@ sleep(void *chan, struct spinlock *lk)
   // Go to sleep.
   proc->chan = chan;
   proc->state = SLEEPING;
-  total_tickets -= proc->tickets;
+  // total_tickets -= proc->tickets;
   sched();
 
   // Tidy up.
@@ -406,7 +411,7 @@ wakeup1(void *chan)
     if(p->state == SLEEPING && p->chan == chan)
     {
       p->state = RUNNABLE;
-      total_tickets += p->tickets;
+      // total_tickets += p->tickets;
     }
       
 }
