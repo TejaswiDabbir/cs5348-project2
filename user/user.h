@@ -1,6 +1,10 @@
 #ifndef _USER_H_
 #define _USER_H_
+/* The following code is added by Tejaswi Dabbir (txd210002) 
+** Includes the pstat struct
+*/
 #include "pstat.h"
+// End of code added
 
 struct stat;
 
@@ -26,8 +30,12 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+/* The following code is added by Tejaswi Dabbir (txd210002) 
+** 2 new system calls for setting tickets, getting process info
+*/
 int settickets(int);
 int getpinfo(struct pstat*);
+// End of code added
 
 // user library functions (ulib.c)
 int stat(char*, struct stat*);

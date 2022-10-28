@@ -5,7 +5,11 @@
 #include "mmu.h"
 #include "proc.h"
 #include "sysfunc.h"
+/* The following code is added by Tejaswi Dabbir (txd210002) 
+** Accesing the new struct to get process statistics
+*/
 #include "pstat.h"
+// End of code added
 
 int
 sys_fork(void)

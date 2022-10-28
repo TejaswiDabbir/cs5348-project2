@@ -23,7 +23,11 @@
 #define SYS_sbrk   19
 #define SYS_sleep  20
 #define SYS_uptime 21
+/* The following code is added by Tejaswi Dabbir (txd210002) 
+** 2 new system calls for setting tickets getting process info
+*/
 #define SYS_settickets 22
 #define SYS_getpinfo 23
+// End of code added
 
 #endif // _SYSCALL_H_

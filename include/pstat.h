@@ -1,3 +1,6 @@
+/* The following code is added by Tejaswi Dabbir (txd210002) 
+** Includes the struct for geting process information
+*/
 #ifndef _PSTAT_H_
 #define _PSTAT_H_
 
@@ -12,3 +15,4 @@ struct pstat
 };
 
 #endif // _PSTAT_H_
+// End of code added

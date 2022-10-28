@@ -23,7 +23,11 @@ int sys_unlink(void);
 int sys_wait(void);
 int sys_write(void);
 int sys_uptime(void);
+/* The following code is added by Tejaswi Dabbir (txd210002) 
+** 2 new system calls for setting tickets, getting process info
+*/
 int sys_settickets(void);
 int sys_getpinfo(void);
+// End of code added
 
 #endif // _SYSFUNC_H_

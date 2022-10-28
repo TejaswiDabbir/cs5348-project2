@@ -27,7 +27,11 @@ extern void trapret(void);
 
 static void wakeup1(void *chan);
 
+/* The following code is added by Tejaswi Dabbir (txd210002) 
+** used to store the total tickets of all runnable processes in the system
+*/
 int total_tickets = 0;
+// End of code added
 
 void
 pinit(void)
@@ -108,9 +112,12 @@ userinit(void)
   p->cwd = namei("/");
 
   p->state = RUNNABLE;
+  /* The following code is added by Tejaswi Dabbir (txd210002) 
+  ** initialises tickets and ticks value for a process
+  */
   p->tickets = 1;
   p->ticks = 0;
-  // total_tickets += 1;
+  // End of code added
   release(&ptable.lock);
 }
 
@@ -168,9 +175,12 @@ fork(void)
  
   pid = np->pid;
   np->state = RUNNABLE;
+  /* The following code is added by Tejaswi Dabbir (txd210002) 
+  ** Initialises tickets and ticks value for child process created by fork
+  */
   np->tickets = proc->tickets;
   np->ticks = 0;
-  // total_tickets += np->tickets;
+  // End of code added
   safestrcpy(np->name, proc->name, sizeof(proc->name));
   return pid;
 }
@@ -214,7 +224,6 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   proc->state = ZOMBIE;
-  // total_tickets -= proc->tickets;
   sched();
   panic("zombie exit");
 }
@@ -401,7 +410,6 @@ sleep(void *chan, struct spinlock *lk)
   // Go to sleep.
   proc->chan = chan;
   proc->state = SLEEPING;
-  // total_tickets -= proc->tickets;
   sched();
 
   // Tidy up.
@@ -425,7 +433,6 @@ wakeup1(void *chan)
     if(p->state == SLEEPING && p->chan == chan)
     {
       p->state = RUNNABLE;
-      // total_tickets += p->tickets;
     }
       
 }
