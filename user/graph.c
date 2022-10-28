@@ -10,7 +10,7 @@ void spin()
 	int i = 0;
   int j = 0;
   int k = 0;
-	for(i = 0; i < 500; ++i)
+	for(i = 0; i < 5000; ++i)
 	{
 		for(j = 0; j < 200000; ++j)
 		{
