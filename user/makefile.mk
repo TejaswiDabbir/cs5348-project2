@@ -7,6 +7,7 @@ USER_PROGS := \
 	forktest\
 	forktickets\
 	getpinfo\
+	graph\
 	grep\
 	high_sleep\
 	high_tickets\
