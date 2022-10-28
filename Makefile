@@ -79,10 +79,14 @@ QEMUGDB := $(shell if $(QEMU) -help | grep -q '^-gdb'; \
 	else echo "-s -p $(GDBPORT)"; fi)
 
 # number of CPUs to emulate in QEMU
+# The following code is modified by Nick Colvin nxc220016
+##
+## change number of CPUS from 2 to 1
+#
 ifndef CPUS
 CPUS := 1
 endif
-
+# end of code modified
 QEMUOPTS := -hdb fs.img xv6.img -smp $(CPUS)
 
 ################################################################################

@@ -5,7 +5,14 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+/*
+* The following code is added by Nick Colvin nxc220016
+**
+** This code adds a reference to pstat.h to access the pstat struct
+** for the new getpinfo system call to verify lottery scheduling.
+*/
 #include "pstat.h"
+/* End of code added */
 
 struct {
   struct spinlock lock;
@@ -271,7 +278,11 @@ scheduler(void)
     // Enable interrupts on this processor.
     sti();
 
-    
+    /*
+    * The following code is added/modified by Nick Colvin nxc220016 and Tejaswi Dabbir txd210002
+    **
+    ** This code modifies the scheduling policy from round robin to lottery scheduling
+    */
 
     int iterated_tickets = 0;
     int runnable_tickets_found = 0;
@@ -316,6 +327,9 @@ scheduler(void)
       break;
 
     }
+
+    /* End of added/modified code */
+
     release(&ptable.lock);
 
   }
@@ -485,11 +499,13 @@ procdump(void)
 }
 
 /*
-* The following code is added by Nick Colvin nxc220016
+* The following code is added by Nick Colvin nxc220016 and Tejaswi Dabbir txd210002
 **
-** This code returns a random ticket number
+** nextticket returns a random ticket number
 ** between 1 and the total number of tickets
 ** using a linear congruential generator
+**
+** pinfohelper fills the argument with the appropriate process info
 */
 int
 nextticket(void)

@@ -74,8 +74,16 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
+  /*
+  * The following code is added by Nick Colvin nxc220016 and Tejaswi Dabbir txd210002
+  **
+  ** tickets determines how likely a process will be selected to run during lottery scheduling
+  ** ticks keeps track of how many ticks a process has been selected to run
+  **
+  */
   int tickets;                 // Stores the number of lottery tickets allocated to the process
   int ticks;                   // Stores the number of ticks the process has been executed
+  /* End of code added */
 };
 
 // Process memory is laid out contiguously, low addresses first:

@@ -90,6 +90,14 @@ sys_uptime(void)
   return xticks;
 }
 
+/*
+* The following code is added by Tejaswi Dabbir txd210002 and Nick Colvin nxc220016
+**
+** sys_settickets is a system call to set the number of lottery tickets for a process
+** sys_getpinfo is a system call to return information about each process in the process table
+** in the form of the struct pstat
+**
+*/
 // sets number of tickets for a process
 // returns 0 if successfull and -1 otherwise
 int
@@ -112,3 +120,4 @@ sys_getpinfo(void)
     return -1;
   return pinfohelper(stats);
 }
+/* End of code added */

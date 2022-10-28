@@ -9,7 +9,15 @@ struct pipe;
 struct proc;
 struct spinlock;
 struct stat;
+
+/*
+* The following code is added by Nick Colvin nxc220016
+**
+** This code adds a reference to a struct to help implement lottery scheduling.
+** The pstat struct allows us to verify lottery scheduling is working using getpinfo system call.
+*/
 struct pstat;
+/* End of code added */
 
 // bio.c
 void            binit(void);
@@ -110,8 +118,17 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+/*
+* The following code is added by Nick Colvin nxc220016
+**
+** This code adds methods to help implement lottery scheduling.
+** Nextticket gets the next randomly generated winning lottery ticket.
+** Pinfohelper sets the pstat structure for the getpinfo system call
+** to verify lottery scheduling.
+*/
 int             nextticket(void);
 int             pinfohelper(struct pstat*);
+/* End of code added */
 
 // swtch.S
 void            swtch(struct context**, struct context*);

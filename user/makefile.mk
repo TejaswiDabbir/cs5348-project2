@@ -1,5 +1,9 @@
 
 # user programs
+
+# The following code is modified by Nick Colvin nxc220016 and Tejaswi Dabbir txd210002
+##
+## add project testcases and graph verification program to list of user programs
 USER_PROGS := \
 	cat\
 	default_tickets\
@@ -29,7 +33,7 @@ USER_PROGS := \
 	usertests\
 	wc\
 	zombie
-
+# end of code modified
 USER_PROGS := $(addprefix user/, $(USER_PROGS))
 
 # user library files

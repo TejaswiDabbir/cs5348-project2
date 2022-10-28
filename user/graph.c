@@ -1,3 +1,12 @@
+/*
+* The following code is added by Nick Colvin nxc220016
+**
+** this user program verifies the lottery scheduling policy
+** by running three processes with a fixed ratio of tickets
+** and prints the number of ticks each receives. It is modified
+** from high_tickets.
+**
+*/
 #include "types.h"
 #include "user.h"
 #include "pstat.h"
@@ -64,3 +73,4 @@ main(int argc, char *argv[])
    while (wait() > -1);
    exit();
 }
+/* End of code added */
